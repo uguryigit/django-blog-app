@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div>
+    <div class="row">
+      <div class="col-lg-8">
+        <h3 class="card-title">{{article.title}}</h3>
+          <div class="card-body">
+            {% if article.article_image %}
+              <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="">
+            {% endif %}
+            <hr>
+            <h2 class="card-title">{{article.title}}</h2>
+            <p class="lead">
+              {{article.author}} tarafından yayınlandı
+            </p>
+            <hr>
+            <p>{{article.created_date}}</p>
+            <hr>
+            <p class="card-text">{{article.content|safe}}</p>
+          </div>
+      </div>
+    </div>
+    <hr>
+    <h4>Yorumlar</h4>
+    {% if comments %}
+      {% for comment in comments %}
+        <div class="media mb-4">
+          <img width="70" height="40" class="d-flex mr-3 rounded-circle" src="http://thetyee.ca/Culture/2019/11/05/CommentBubble1.jpg">
+          <div class="media-body">
+            <h5 class="mt-0">{{comment.comment_author}}</h5>
+            <small>{{comment.comment_date}}</small>
+            <br>
+            {{comment.comment_content}}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-danger"> 
+        Bu makaleye herhangi bir yorum yapılmamış. İlk yorum yapan siz olun.
+      </div>
+    {% endif %}
+    <hr>
+
+
+    <div class="row">
+      <div class="col-lg-8">
+        <h5 class="card-header">Yorum Ekle:</h5>
+        <div class="card-body">
+          <form method = "post" action ="{% url 'article:comment' article.id %}">
+            {% csrf_token %}
+              <div class="form-group">
+                <label for="formGroupExampleInput">İsim</label>
+                <input name="comment_author" type="text" class="form-control" id="formGroupExampleInput" placeholder="İsminizi Girin">
+              </div>
+              <div class="form-group">
+                <label for="formtextarea">Yorum</label>
+                <textarea name="comment_content" class="form-control" rows="3" id ="formtextarea" ></textarea>
+              </div>  
+            <button type="submit" class="btn btn-danger">Ekle</button>
+          </form>
+        </div>
+      </div>  
+    </div>
+  </div>  
+{% endblock body %}
+
